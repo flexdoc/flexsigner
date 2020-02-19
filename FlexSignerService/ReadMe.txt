@@ -18,3 +18,5 @@ Para a versão de 64 bits do .NET Framework 4 ou 4.5.*, o caminho padrão
 
 
 Obs.: Usualmente> C:\Windows\Microsoft.NET\Framework64\v4.0.30319
+
+teste

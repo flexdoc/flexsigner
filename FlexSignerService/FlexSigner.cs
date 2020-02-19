@@ -13,7 +13,9 @@ namespace FlexSignerService
         private string signInputPath = "";
         private string signOutputPath = "";
         private string signTempPath = "";
-     
+
+        private string signCycle = "";
+
         private readonly Log _log = new Log();
 
         private System.Timers.Timer timer;
@@ -25,14 +27,21 @@ namespace FlexSignerService
 
             if (!File.Exists(configFile))
             {
+                IniFile.IniWriteValue(configFile, "SIGN", "Cycle", "10");
                 IniFile.IniWriteValue(configFile, "SIGN", "SignInputPath", @"C:\sign\input\");
                 IniFile.IniWriteValue(configFile, "SIGN", "SignOutputPath", @"C:\sign\output\");
                 IniFile.IniWriteValue(configFile, "SIGN", "SignTempPath", @"C:\sign\temp\");
 
                 IniFile.IniWriteValue(configFile, "CERTIFICATE", "cnpj", "10583028000152");
+                
             }
 
             _log.Debug("Init: [1]");
+
+            signCycle = IniFile.IniReadValue(configFile, "SIGN", "Cycle");
+
+            if (signCycle == "")
+                signCycle = "10";
 
             signInputPath = IniFile.IniReadValue(configFile, "SIGN", "SignInputPath");
             signOutputPath = IniFile.IniReadValue(configFile, "SIGN", "SignOutputPath");
@@ -58,6 +67,7 @@ namespace FlexSignerService
             _log.Debug("SignInputPath:" + signInputPath);
             _log.Debug("SignOutputPath:" + signOutputPath);
             _log.Debug("SignTempPath:" + signTempPath);
+            _log.Debug("SignCycle:" + signCycle);
 
             _log.Debug("Checking certificate");
             signx509 = new SignX509(cnpjCertificate);
@@ -70,7 +80,9 @@ namespace FlexSignerService
 
             _log.Debug("Certificate Ok : [" + cnpjCertificate + "]");
 
-            this.timer = new System.Timers.Timer(30000D);  // 30000 milliseconds = 30 seconds
+            int delay = (Convert.ToInt32("0" + signCycle))*1000;
+
+            this.timer = new System.Timers.Timer(delay);  // 30000 milliseconds = 30 seconds
             this.timer.AutoReset = true;
             this.timer.Elapsed += new System.Timers.ElapsedEventHandler(this.timer1_Tick);
             this.timer.Start();
