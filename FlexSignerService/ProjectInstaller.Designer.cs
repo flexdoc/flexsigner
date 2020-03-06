@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.serviceProcessInstaller1 = new System.ServiceProcess.ServiceProcessInstaller();
-            this.serviceInstaller1 = new System.ServiceProcess.ServiceInstaller();
+            this.FlexSignerService = new System.ServiceProcess.ServiceProcessInstaller();
+            this.FlexSignerServiceInstaller = new System.ServiceProcess.ServiceInstaller();
             // 
-            // serviceProcessInstaller1
+            // FlexSignerService
             // 
-            this.serviceProcessInstaller1.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
-            this.serviceProcessInstaller1.Password = null;
-            this.serviceProcessInstaller1.Username = null;
+            this.FlexSignerService.Account = System.ServiceProcess.ServiceAccount.LocalSystem;
+            this.FlexSignerService.Password = null;
+            this.FlexSignerService.Username = null;
             // 
-            // serviceInstaller1
+            // FlexSignerServiceInstaller
             // 
-            this.serviceInstaller1.Description = "FlexSignerService";
-            this.serviceInstaller1.DisplayName = "FlexSignerService";
-            this.serviceInstaller1.ServiceName = "Service1";
-            this.serviceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
+            this.FlexSignerServiceInstaller.Description = "FlexSignerService";
+            this.FlexSignerServiceInstaller.DisplayName = "FlexSignerService";
+            this.FlexSignerServiceInstaller.ServiceName = "FlexSignerService";
+            this.FlexSignerServiceInstaller.StartType = System.ServiceProcess.ServiceStartMode.Automatic;
             // 
             // ProjectInstaller
             // 
             this.Installers.AddRange(new System.Configuration.Install.Installer[] {
-            this.serviceProcessInstaller1,
-            this.serviceInstaller1});
+            this.FlexSignerService,
+            this.FlexSignerServiceInstaller});
 
         }
 
         #endregion
 
-        private System.ServiceProcess.ServiceProcessInstaller serviceProcessInstaller1;
-        private System.ServiceProcess.ServiceInstaller serviceInstaller1;
+        private System.ServiceProcess.ServiceProcessInstaller FlexSignerService;
+        private System.ServiceProcess.ServiceInstaller FlexSignerServiceInstaller;
     }
 }

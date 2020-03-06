@@ -14,13 +14,13 @@ C:\SourceCode\CSHARP\FlexSigner\FlexSigner\TestApp\obj\Debug\TestApp.pdb
 C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\TestApp.exe.config
 C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\TestApp.exe
 C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\TestApp.pdb
-C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\WatchDogService.exe
 C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\log4net.dll
 C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\itextsharp.dll
-C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\WatchDogService.pdb
-C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\WatchDogService.exe.config
 C:\SourceCode\CSHARP\FlexSigner\TestApp\obj\Debug\TestApp.csprojAssemblyReference.cache
 C:\SourceCode\CSHARP\FlexSigner\TestApp\obj\Debug\TestApp.csproj.CoreCompileInputs.cache
 C:\SourceCode\CSHARP\FlexSigner\TestApp\obj\Debug\TestApp.csproj.CopyComplete
 C:\SourceCode\CSHARP\FlexSigner\TestApp\obj\Debug\TestApp.exe
 C:\SourceCode\CSHARP\FlexSigner\TestApp\obj\Debug\TestApp.pdb
+C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\FlexSignerService.exe
+C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\FlexSignerService.pdb
+C:\SourceCode\CSHARP\FlexSigner\TestApp\bin\Debug\FlexSignerService.exe.config

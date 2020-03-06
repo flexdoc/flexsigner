@@ -1,6 +1,3 @@
-C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\WatchDogService.exe.config
-C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\WatchDogService.exe
-C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\WatchDogService.pdb
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\itextsharp.dll
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\log4net.dll
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.ProjectInstaller.resources
@@ -8,5 +5,9 @@ C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.Se
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csproj.GenerateResource.cache
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csproj.CoreCompileInputs.cache
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csproj.CopyComplete
-C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\WatchDogService.exe
-C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\WatchDogService.pdb
+C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csprojAssemblyReference.cache
+C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\FlexSignerService.exe.config
+C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\FlexSignerService.exe
+C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\FlexSignerService.pdb
+C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.exe
+C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.pdb
