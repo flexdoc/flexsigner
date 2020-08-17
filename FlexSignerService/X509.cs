@@ -161,6 +161,9 @@ namespace FlexSignerService
                 MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
                 ret = true;
             }
+            catch( Exception ex )
+            {
+            }
             finally
             {
                 if (reader != null)

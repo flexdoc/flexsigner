@@ -5,7 +5,6 @@ C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.Se
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csproj.GenerateResource.cache
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csproj.CoreCompileInputs.cache
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csproj.CopyComplete
-C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\obj\Debug\FlexSignerService.csprojAssemblyReference.cache
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\FlexSignerService.exe.config
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\FlexSignerService.exe
 C:\SourceCode\CSHARP\FlexSigner\FlexSignerService\bin\Debug\FlexSignerService.pdb

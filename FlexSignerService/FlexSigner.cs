@@ -125,7 +125,7 @@ namespace FlexSignerService
                             if (System.IO.File.Exists(fileout))
                                 System.IO.File.Delete(fileout);
 
-                            if (!signx509.CheckIfExistsSignature(file))
+//                            if (!signx509.CheckIfExistsSignature(file))
                             {
                                 if (signx509.SignPDF(file, fileTmp))
                                 {
@@ -134,12 +134,12 @@ namespace FlexSignerService
                                     _log.Debug("Processed: " + file);
                                 }
                             }
-                            else
-                            {
-                                //Check if it is already signed
-                                _log.Debug("File already has certificate: " + file);
-                                System.IO.File.Move(file, fileout);
-                            }
+                            //else
+                            //{
+                            //    //Check if it is already signed
+                            //    _log.Debug("File already has certificate: " + file);
+                            //    System.IO.File.Move(file, fileout);
+                            //}
 
                         }
                         catch (Exception e)
