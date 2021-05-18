@@ -7,8 +7,8 @@
     <ProjectGuid>{1643D056-BE9E-4C35-9081-5920D0D47CF0}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WatchDogService</RootNamespace>
-    <AssemblyName>WatchDogService</AssemblyName>
+    <RootNamespace>FlexSignerService</RootNamespace>
+    <AssemblyName>FlexSignerService</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
