@@ -264,3 +264,5 @@ __pycache__/
 *.pyc
 
 *.zip
+/FlexSignerService/bin/Debug/itextsharp.dll
+/FlexSignerService/bin/Debug/itextsharp.dll
