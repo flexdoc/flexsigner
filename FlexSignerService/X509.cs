@@ -156,7 +156,7 @@ namespace FlexSignerService
                     //File.WriteAllBytes(dest.Replace(".pdf", ".DecriptPortela.pdf"), docIn);
                 }
 
-                reader = new PdfReader(src);
+                reader = new PdfReader(docIn);
 
                 AcroFields fields = reader.AcroFields;
                 int totSignatures = fields.TotalRevisions;
