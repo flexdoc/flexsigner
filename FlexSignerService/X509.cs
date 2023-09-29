@@ -39,6 +39,9 @@ namespace FlexSignerService
         public int NumberOfCertificatesFound = 0;
         private readonly Log _log = new Log();
 
+        private string _chave = @"A4TyX3KUXrqK8weoUtQxJHrWEXPDmsTG";
+        private byte[] _IV = new byte[16];
+
         public SignX509(string certNum)
         {
             this.certNum = certNum;
@@ -133,9 +136,25 @@ namespace FlexSignerService
             PdfReader reader = null;
             PdfStamper stamper = null;
             FileStream os = null;
+            bool isCripted = false;
+
             try
             {
                 PdfReader.unethicalreading = true;
+
+                // Verifica se é criptografado e decriptografa
+                byte[] originalIn = File.ReadAllBytes(src);
+                byte[] docIn = originalIn;
+
+                string header = System.Text.Encoding.UTF8.GetString(originalIn, 0, 4);
+                isCripted = header.StartsWith("%PDF") == false;
+
+                if (isCripted)
+                {
+                    byte[] passwordBytes = new FlexCripto().GetAes256SecretKey(_chave);
+                    docIn = new FlexCripto().FileDecrypt(originalIn, passwordBytes, _IV);
+                    //File.WriteAllBytes(dest.Replace(".pdf", ".DecriptPortela.pdf"), docIn);
+                }
 
                 reader = new PdfReader(src);
 
@@ -158,7 +177,8 @@ namespace FlexSignerService
                 // Creating the signature
                 IExternalSignature pks = new X509Certificate2Signature(pk, digestAlgorithm);
 
-                MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
+                MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, 0, subfilter);
+
                 ret = true;
             }
             catch( Exception ex )
@@ -173,6 +193,17 @@ namespace FlexSignerService
                 if (os != null)
                     os.Close();
             }
+
+            // Gera arquivo na pasta TEMP (Criptografado ou não)
+            byte[] docOut = File.ReadAllBytes(dest); //  ms.ToArray();
+
+            if (isCripted)
+            {
+                byte[] passwordBytes = new FlexCripto().GetAes256SecretKey(_chave);
+                docOut = new FlexCripto().FileEncrypt(docOut, passwordBytes, _IV);
+            }
+
+            File.WriteAllBytes(dest, docOut);
 
             return ret;
         }
