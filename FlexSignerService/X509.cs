@@ -39,56 +39,54 @@ namespace FlexSignerService
         public int NumberOfCertificatesFound = 0;
         private readonly Log _log = new Log();
 
+        private string _chave = @"A4TyX3KUXrqK8weoUtQxJHrWEXPDmsTG";
+        private byte[] _IV = new byte[16];
+
         public SignX509(string certNum)
         {
             this.certNum = certNum;
             bool x = PrepareCert(certNum, StoreLocation.LocalMachine);
 
-            if(x==false)
+            if(!x)
                 x = PrepareCert(certNum, StoreLocation.CurrentUser);
 
         }
 
         private bool PrepareCert(string certNum, StoreLocation storeLocation)
         {
+            NumberOfCertificatesFound = 0;
             x509Store = new X509Store(storeLocation);
             x509Store.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection certificates = x509Store.Certificates;
             chain = new List<X509Certificate>();
             pk = null;
 
-            NumberOfCertificatesFound = certificates.Count;
-
             bool found = false;
 
             if (certificates.Count > 0)
             {
-                X509Certificate2Enumerator certificatesEn = certificates.GetEnumerator();
-                int contCert = 0;
-                while (true)
+                foreach(X509Certificate2 cert in certificates)
                 {
-                    contCert++;
-                    certificatesEn.MoveNext();
-                    pk = certificatesEn.Current;
-                    _log.Debug(pk.FriendlyName.ToString());
+                    pk = cert;
+                    _log.Debug(pk.FriendlyName.ToString() + " - " + pk.NotAfter);
 
                     if (pk.Subject.Contains(certNum))
                     {
                         DateTime dt = pk.NotAfter;
                         if (dt > System.DateTime.UtcNow)
                         {
+                            _log.Debug("Found valid certificate [" + this.certNum + "] valid :[" + dt + "]!");
+                            NumberOfCertificatesFound = 1;
                             found = true;
                             break;
-                        }
+                        }                        
                     }
-
-                    if (contCert >= certificates.Count)
-                        break;
                 }
 
                 if (!found)
                 {
                     _log.Debug("Certificado [" + this.certNum + "] não encontrado!");
+                    return false;
                 }
 
                 X509Chain x509chain = new X509Chain();
@@ -97,9 +95,8 @@ namespace FlexSignerService
                 x509chain.Build(pk);
 
                 foreach (X509ChainElement x509ChainElement in x509chain.ChainElements)
-                {
                     chain.Add(DotNetUtilities.FromX509Certificate(x509ChainElement.Certificate));
-                }
+                
             }
             x509Store.Close();
 
@@ -139,11 +136,27 @@ namespace FlexSignerService
             PdfReader reader = null;
             PdfStamper stamper = null;
             FileStream os = null;
+            bool isCripted = false;
+
             try
             {
                 PdfReader.unethicalreading = true;
 
-                reader = new PdfReader(src);
+                // Verifica se é criptografado e decriptografa
+                byte[] originalIn = File.ReadAllBytes(src);
+                byte[] docIn = originalIn;
+
+                string header = System.Text.Encoding.UTF8.GetString(originalIn, 0, 4);
+                isCripted = header.StartsWith("%PDF") == false;
+
+                if (isCripted)
+                {
+                    byte[] passwordBytes = new FlexCripto().GetAes256SecretKey(_chave);
+                    docIn = new FlexCripto().FileDecrypt(originalIn, passwordBytes, _IV);
+                    //File.WriteAllBytes(dest.Replace(".pdf", ".DecriptPortela.pdf"), docIn);
+                }
+
+                reader = new PdfReader(docIn);
 
                 AcroFields fields = reader.AcroFields;
                 int totSignatures = fields.TotalRevisions;
@@ -164,9 +177,12 @@ namespace FlexSignerService
                 // Creating the signature
                 IExternalSignature pks = new X509Certificate2Signature(pk, digestAlgorithm);
 
-                //MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
-                MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
+                MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, 0, subfilter);
+
                 ret = true;
+            }
+            catch( Exception ex )
+            {
             }
             finally
             {
@@ -177,6 +193,17 @@ namespace FlexSignerService
                 if (os != null)
                     os.Close();
             }
+
+            // Gera arquivo na pasta TEMP (Criptografado ou não)
+            byte[] docOut = File.ReadAllBytes(dest); //  ms.ToArray();
+
+            if (isCripted)
+            {
+                byte[] passwordBytes = new FlexCripto().GetAes256SecretKey(_chave);
+                docOut = new FlexCripto().FileEncrypt(docOut, passwordBytes, _IV);
+            }
+
+            File.WriteAllBytes(dest, docOut);
 
             return ret;
         }
@@ -264,9 +291,9 @@ namespace FlexSignerService
             return false;
         }
 
-        public bool SignPDF(string fileIn, string fileOut)
+        public bool SignPDF(string fileIn, string fileOut, string reason = "-", string location= "BR")
         {
-            bool ret = Sign(fileIn, fileOut, chain, pk, DigestAlgorithms.SHA1, CryptoStandard.CMS, "Test", "Ghent", crlList, ocspClient, tsaClient, 0);
+            bool ret = Sign(fileIn, fileOut, chain, pk, DigestAlgorithms.SHA1, CryptoStandard.CMS, reason, location, crlList, ocspClient, tsaClient, 0);
             return ret;
         }
                 
