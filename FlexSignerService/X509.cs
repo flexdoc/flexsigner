@@ -178,6 +178,7 @@ namespace FlexSignerService
                 IExternalSignature pks = new X509Certificate2Signature(pk, digestAlgorithm);
 
                 MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, 0, subfilter);
+
                 ret = true;
             }
             catch( Exception ex )
