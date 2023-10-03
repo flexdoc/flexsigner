@@ -121,6 +121,7 @@ namespace FlexSignerService
             PdfReader reader = null;
             PdfStamper stamper = null;
             MemoryStream ms = null;
+            byte[] docOut = null;
             bool isCripted = false;
 
             try
@@ -177,6 +178,9 @@ namespace FlexSignerService
 
                 MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
 
+                // Gera arquivo na pasta TEMP (Criptografado ou não)
+                docOut = ms.ToArray(); // File.ReadAllBytes(dest); //  ms.ToArray();
+
                 ret = true;
             }
             catch( Exception ex )
@@ -192,9 +196,6 @@ namespace FlexSignerService
                 if (ms != null)
                     ms.Close();
             }
-
-            // Gera arquivo na pasta TEMP (Criptografado ou não)
-            byte[] docOut = ms.ToArray(); // File.ReadAllBytes(dest); //  ms.ToArray();
 
             if (isCripted)
             {
