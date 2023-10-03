@@ -1,25 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Security.Cryptography.Xml;
-using System.Security.Principal;
-
-using System.Security.Cryptography.Pkcs;
-
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Pkcs;
-using Org.BouncyCastle.X509;
 using Org.BouncyCastle.Security;
-
-using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.security;
-using iTextSharp.text.log;
 
 using X509Certificate = Org.BouncyCastle.X509.X509Certificate;
 
@@ -135,7 +120,7 @@ namespace FlexSignerService
             // Creating the reader and the stamper
             PdfReader reader = null;
             PdfStamper stamper = null;
-            FileStream os = null;
+            MemoryStream ms = null;
             bool isCripted = false;
 
             try
@@ -156,6 +141,19 @@ namespace FlexSignerService
                     //File.WriteAllBytes(dest.Replace(".pdf", ".DecriptPortela.pdf"), docIn);
                 }
 
+                // Não informado. Por ser INT, gera problema em arquivos muito grandes (acima de 32k)
+                //estimatedSize = docIn.Length;
+
+                //// TESTAR: criptografa novamente e salva pra verificar integridade (teste)
+                //byte[] docTmp = null;
+                //if (isCripted)
+                //{
+                //    byte[] passwordBytes = new FlexCripto().GetAes256SecretKey(_chave);
+                //    docTmp = new FlexCripto().FileEncrypt(docIn, passwordBytes, _IV);
+                //    File.WriteAllBytes(dest.Replace(".pdf", ".CriptPortela.pdf"), docTmp);
+                //}
+
+                // Processa PDF decriptografado
                 reader = new PdfReader(docIn);
 
                 AcroFields fields = reader.AcroFields;
@@ -163,8 +161,8 @@ namespace FlexSignerService
 
                 int totPages = reader.NumberOfPages;
 
-                os = new FileStream(dest, FileMode.Create);
-                stamper = PdfStamper.CreateSignature(reader, os, '\0', null, true);
+                ms = new MemoryStream();
+                stamper = PdfStamper.CreateSignature(reader, ms, '\0', null, true);
 
                 //Seta para abrir com thumbnails
                 stamper.Writer.ExtraCatalog.Put(PdfName.PAGEMODE, PdfName.USETHUMBS);
@@ -177,12 +175,13 @@ namespace FlexSignerService
                 // Creating the signature
                 IExternalSignature pks = new X509Certificate2Signature(pk, digestAlgorithm);
 
-                MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, 0, subfilter);
+                MakeSignature.SignDetached(appearance, pks, chain, crlList, ocspClient, tsaClient, estimatedSize, subfilter);
 
                 ret = true;
             }
             catch( Exception ex )
             {
+                _log.Error($"Sign Ex: PDF Error: {ex.Message}");
             }
             finally
             {
@@ -190,12 +189,12 @@ namespace FlexSignerService
                     reader.Close();
                 if (stamper != null)
                     stamper.Close();
-                if (os != null)
-                    os.Close();
+                if (ms != null)
+                    ms.Close();
             }
 
             // Gera arquivo na pasta TEMP (Criptografado ou não)
-            byte[] docOut = File.ReadAllBytes(dest); //  ms.ToArray();
+            byte[] docOut = ms.ToArray(); // File.ReadAllBytes(dest); //  ms.ToArray();
 
             if (isCripted)
             {
